@@ -1,33 +1,22 @@
-import React from "react";
 import { useDrag } from "react-dnd";
+import { ItemTypes } from "../pages/Dashboard";
 
-// Define the props interface for the Card component
-interface CardProps {
-  card: string; // Title of the card
-}
-
-const Card: React.FC<CardProps> = ({ card }) => {
-  // React DnD's useDrag hook for enabling drag functionality
-  const [{ isDragging }, drag] = useDrag({
-    type: "CARD", // Drag type for this component
-    item: { card }, // Data to pass when dragging (in this case, the card title)
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(), // Track drag state
-    }),
+export const Card: React.FC<{
+  card: string;
+  column: string;
+  onDrop: (card: string, column: string) => void;
+}> = ({ card, column, onDrop }) => {
+  const [, drag] = useDrag({
+    type: ItemTypes.CARD,
+    item: { card, column },
   });
 
   return (
-    // Render the card with drag-and-drop functionality
-    // Apply reduced opacity when the card is being dragged
     <div
       ref={drag}
-      className={`p-4 bg-white rounded-md shadow-md mb-2 ${
-        isDragging ? "opacity-50" : ""
-      }`}
+      className="task bg-white p-3 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 transition-colors"
     >
       {card}
     </div>
   );
 };
-
-export default Card;

@@ -1,32 +1,39 @@
-import React from "react";
-import Card from "./Card";
 import { useDrop } from "react-dnd";
+import { ItemTypes } from "../pages/Dashboard";
+import { Card } from "./Card";
 
-// Define the props interface for the Column component
-interface ColumnProps {
+export const Column: React.FC<{
   title: string;
-  cards: string[]; // Array of card titles within this column
-  onDrop: (card: string) => void; // Callback function to handle dropping a card
-}
-
-const Column: React.FC<ColumnProps> = ({ title, cards, onDrop }) => {
-  // React DnD's useDrop hook for handling dropping of cards
+  cards: string[];
+  onAddCard: () => void;
+  onDrop: (card: string) => void;
+}> = ({ title, cards, onAddCard, onDrop }) => {
   const [, drop] = useDrop({
-    accept: "CARD", // Only accept drag items of type 'CARD'
-    drop: (item: { card: string }) => onDrop(item.card), // Call onDrop when a card is dropped
+    accept: ItemTypes.CARD,
+    drop: (item: { card: string; column: string }) => {
+      onDrop(item.card);
+    },
   });
 
   return (
-    // Container for the column with drag-and-drop capabilities
-    <div ref={drop} className="w-64 p-4 bg-gray-200 rounded-md shadow-md">
-      <h2 className="font-bold mb-4">{title}</h2>
+    <div
+      ref={drop}
+      className="column bg-gray-200 rounded-lg shadow-lg p-4 flex-1 min-w-[250px]"
+    >
+      <h2 className="font-bold text-lg text-center mb-4">{title}</h2>
+      <div className="tasks space-y-2">
+        {cards.map((card) => (
+          <Card key={card} card={card} column={title} onDrop={onDrop} />
+        ))}
 
-      {/* Render each card inside the column */}
-      {cards.map((card, idx) => (
-        <Card key={idx} card={card} />
-      ))}
+        {/* Add Card Button */}
+        <button
+          onClick={onAddCard}
+          className="w-full mt-2 py-2 text-blue-500 border border-dashed border-blue-500 rounded-lg"
+        >
+          + Add Card
+        </button>
+      </div>
     </div>
   );
 };
-
-export default Column;
