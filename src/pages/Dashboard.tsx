@@ -10,9 +10,9 @@ export const ItemTypes = {
 
 const Dashboard: React.FC = () => {
   const [columns, setColumns] = useState<ColumnType>({
-    "To Do": ["Task 1", "Task 2"],
-    "In Progress": ["Task 3"],
-    Done: ["Task 4"],
+    "To Do": [],
+    "In Progress": [],
+    Done: [],
   });
 
   // Handle adding a new task to a specific column
