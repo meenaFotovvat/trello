@@ -7,6 +7,8 @@ import { useAuth } from "./services/AuthContext";
 import { Navigate } from "react-router-dom";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { isMobile } from "react-device-detect";
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isAuthenticated } = useAuth();
@@ -15,7 +17,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 const App: React.FC = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
